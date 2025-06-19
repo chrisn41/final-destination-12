@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git credentialsId: 'github-token', url: 'https://github.com/iqlalunesa/final-destination-12.git'
+                git credentialsId: 'github-token', url: 'https://github.com/chrisn41/final-destination-12.git'
             }
         }
 
