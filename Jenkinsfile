@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Clone Repository') {
       steps {
-        git url: "${env.GIT_REPO}", branch: 'main'
+        git url: "${env.GIT_REPO}", branch: 'main', credentialsId: 'github-token'
       }
     }
 
@@ -22,14 +22,18 @@ pipeline {
 
     stage('Commit and Push Changes') {
       steps {
-        sh '''
-        git config user.name "CI Bot"
-        git config user.email "ci-bot@example.com"
+        withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+          sh '''
+          git config user.name "CI Bot"
+          git config user.email "ci-bot@example.com"
 
-        git add webapp/index.html
-        git commit -m "CI: Update index.html with new gallery images" || echo "No changes to commit"
-        git push origin main
-        '''
+          git add webapp/index.html
+          git commit -m "CI: Update index.html with new gallery images" || echo "No changes to commit"
+
+          git remote set-url origin https://$GIT_USER:$GIT_TOKEN@github.com/chrisn41/final-destination-12.git
+          git push origin main
+          '''
+        }
       }
     }
 
