@@ -33,12 +33,13 @@ services:
     command:
       - '--path.rootfs=/rootfs'
       - '--collector.textfile.directory=/var/lib/node_exporter/textfile_collector'
-  
+
   webapp:
     image: ghcr.io/iqlalunesa/final-destination-12:latest
     container_name: final-web
     ports:
-      - "8080:80"
+      - "8181:80"  # Ganti port host dari 8080 ke 8181
 
 volumes:
   grafana-storage:
+
