@@ -22,7 +22,7 @@ pipeline {
 
     stage('Commit and Push Changes') {
       steps {
-        withCredentials([usernamePassword(credentialsId: 'chrisn41', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+        withCredentials([usernamePassword(credentialsId: 'ceb0c844-e96d-4c75-a7c0-7e5ef62131d7', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
           sh '''
           git config user.name "chrisn41"
           git config user.email "tawakalkrisna@gmail.com"
