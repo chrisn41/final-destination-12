@@ -15,7 +15,7 @@ pipeline {
     stage('Update index.html') {
       steps {
         sh '''
-          python3 scripts/update_gallery.py
+        python3 scripts/update_gallery.py
         '''
       }
     }
@@ -24,12 +24,14 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: 'ceb0c844-e96d-4c75-a7c0-7e5ef62131d7', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
           sh '''
-            git config user.name "chrisn41"
-            git config user.email "tawakalkrisna@gmail.com"
-            git add webapp/index.html
-            git commit -m "CI: Update index.html with new gallery images" || echo "No changes to commit"
-            git remote set-url origin https://$GIT_USER:$GIT_TOKEN@github.com/chrisn41/final-destination-12.git
-            git push origin main
+          git config user.name "chrisn41"
+          git config user.email "tawakalkrisna@gmail.com"
+
+          git add webapp/index.html
+          git commit -m "CI: Update index.html with new gallery images" || echo "No changes to commit"
+
+          git remote set-url origin https://$GIT_USER:$GIT_TOKEN@github.com/chrisn41/final-destination-12.git
+          git push origin main
           '''
         }
       }
@@ -37,12 +39,10 @@ pipeline {
 
     stage('Deploy (Optional)') {
       steps {
-        dir('ci-final-project') {
-          sh '''
-            docker compose down || true
-            docker compose up -d --build
-          '''
-        }
+        sh '''
+        docker compose down || true
+        docker compose up -d --build
+        '''
       }
     }
   }
