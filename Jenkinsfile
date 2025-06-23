@@ -6,6 +6,12 @@ pipeline {
   }
 
   stages {
+    stage('Clean Workspace') {
+      steps {
+        cleanWs()
+      }
+    }
+
     stage('Clone Repository') {
       steps {
         git url: "${env.GIT_REPO}", branch: 'main', credentialsId: 'ceb0c844-e96d-4c75-a7c0-7e5ef62131d7'
@@ -40,7 +46,12 @@ pipeline {
     stage('Deploy (Optional)') {
       steps {
         sh '''
-        docker compose down || true
+        # Cleanup existing containers to avoid name conflict
+        docker compose down -v || true
+        docker rm -f node-exporter grafana prometheus final-web || true
+        docker volume prune -f || true
+
+        # Rebuild and restart containers
         docker compose up -d --build
         '''
       }
