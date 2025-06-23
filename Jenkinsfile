@@ -40,6 +40,11 @@ pipeline {
     stage('Deploy (Optional)') {
       steps {
         sh '''
+        cd ci-final-project
+
+        # Salin prometheus.yml dari root repo ke direktori kerja
+        cp ../prometheus.yml .
+
         docker compose down || true
         docker compose up -d --build
         '''
