@@ -39,10 +39,12 @@ pipeline {
 
     stage('Deploy (Optional)') {
       steps {
-        sh '''
-        docker compose down || true
-        docker compose up -d --build
-        '''
+        dir('ci-final-project') {
+          sh '''
+          docker compose down || true
+          docker compose up -d --build
+          '''
+        }
       }
     }
   }
