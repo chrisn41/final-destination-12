@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   prometheus:
     image: prom/prometheus
@@ -5,9 +7,11 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    depends_on:
+      - node-exporter
 
   grafana:
     image: grafana/grafana
@@ -19,6 +23,8 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
 
   node-exporter:
     image: prom/node-exporter
@@ -38,8 +44,7 @@ services:
     image: ghcr.io/iqlalunesa/final-destination-12:latest
     container_name: final-web
     ports:
-      - "8181:80"  # Ganti port host dari 8080 ke 8181
+      - "8181:80"  # Port host 8181 agar tidak bentrok dengan 8080
 
 volumes:
   grafana-storage:
-
